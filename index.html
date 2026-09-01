@@ -19,8 +19,17 @@
         .brand h1{color:#fff;font-size:22px;font-weight:300;letter-spacing:4px;text-transform:uppercase}
         .brand h1 span{color:#a78bfa;font-weight:700}
         .brand p{color:rgba(255,255,255,0.15);font-size:9px;letter-spacing:3px;margin-top:4px;text-transform:uppercase}
+        .step-status{display:flex;justify-content:center;gap:30px;margin:10px 0 20px 0;font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;font-weight:600;letter-spacing:1px}
+        .step-status .done{color:#34d399}
+        .social-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;transition:0.3s;margin:6px 0;font-family:inherit;text-transform:uppercase;letter-spacing:1px}
+        .social-btn.youtube{background:linear-gradient(135deg,#ff0000,#cc0000)}
+        .social-btn.youtube:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,0,0,0.35)}
+        .social-btn.telegram{background:linear-gradient(135deg,#0088cc,#006699)}
+        .social-btn.telegram:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,136,204,0.35)}
+        .note{text-align:center;color:rgba(255,255,255,0.25);font-size:10px;margin:8px 0 14px 0;letter-spacing:0.5px;text-transform:uppercase;font-weight:500}
         .unlock-btn{width:100%;padding:16px;background:linear-gradient(135deg,#34d399,#22d3ee);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:0.3s;margin-top:4px;font-family:inherit;text-transform:uppercase}
-        .unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(52,211,153,0.35)}
+        .unlock-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(52,211,153,0.35)}
+        .unlock-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none}
         .footer{text-align:center;margin-top:24px;color:rgba(255,255,255,0.08);font-size:8px;letter-spacing:3px;text-transform:uppercase}
     </style>
 </head>
@@ -32,13 +41,28 @@
             <h1>LEO <span>MDZ</span></h1>
             <p>CRIADOR @LEO MODZ</p>
         </div>
-        <button class="unlock-btn" id="unlockBtn" onclick="unlockProxy()">
+        <div class="step-status">
+            <span id="ytStatus"><i class="fab fa-youtube"></i> YOUTUBE</span>
+            <span id="tgStatus"><i class="fab fa-telegram"></i> TELEGRAM</span>
+        </div>
+        <a href="https://youtube.com/@leomodzofc1?si=iOWwXPqx455mXrb_" target="_blank" class="social-btn youtube" onclick="markYouTube()">
+            <i class="fab fa-youtube"></i> INSCREVA-SE PARA CONTINUAR
+        </a>
+        <a href="https://t.me/LEOMDZALLSRCLEAKISBACK" target="_blank" class="social-btn telegram" onclick="markTelegram()">
+            <i class="fab fa-telegram-plane"></i> ENTRE NO TG PARA CONTINUAR
+        </a>
+        <div class="note">INSCREVA-SE E ENTRE NO TG PARA CONTINUAR.</div>
+        <button class="unlock-btn" id="unlockBtn" disabled="" onclick="unlockProxy()">
             <i class="fas fa-arrow-right"></i> TOQUE PARA CONTINUAR
         </button>
         <div class="footer">SEGURO</div>
     </div>
     <script>
-        function unlockProxy(){fetch('/unlock',{method:'POST'}).then(r=>r.json()).then(d=>{if(d.success){window.location.href='/dashboard';}});}
+        let ytClicked=false;let tgClicked=false;
+        function markYouTube(){ytClicked=true;document.getElementById('ytStatus').className='done';document.getElementById('ytStatus').innerHTML='<i class="fab fa-youtube"></i> ✓ YOUTUBE';checkUnlock();}
+        function markTelegram(){tgClicked=true;document.getElementById('tgStatus').className='done';document.getElementById('tgStatus').innerHTML='<i class="fab fa-telegram"></i> ✓ TELEGRAM';checkUnlock();}
+        function checkUnlock(){if(ytClicked&&tgClicked){document.getElementById('unlockBtn').disabled=false;}}
+        function unlockProxy(){if(!ytClicked||!tgClicked)return;fetch('/unlock',{method:'POST'}).then(r=>r.json()).then(d=>{if(d.success){window.location.href='/dashboard';}});}
     </script>
 
 </body></html>
