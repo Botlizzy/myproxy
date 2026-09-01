@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEO MDZ · DESBLOQUEAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#07070d;font-family:'Poppins','Segoe UI',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;position:relative;overflow:hidden}
+        .aurora{position:fixed;inset:0;z-index:0;overflow:hidden}
+        .aurora span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.16;animation:float 14s ease-in-out infinite}
+        .aurora span:nth-child(1){width:420px;height:420px;background:#7c3aed;top:-120px;left:-100px}
+        .aurora span:nth-child(2){width:380px;height:380px;background:#ec4899;bottom:-120px;right:-80px;animation-delay:-7s}
+        @keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,30px) scale(1.15)}}
+        .container{max-width:400px;width:100%;background:rgba(15,15,26,0.88);backdrop-filter:blur(32px);border-radius:28px;padding:44px 36px;border:1px solid rgba(255,255,255,0.07);box-shadow:0 48px 96px rgba(0,0,0,0.9);position:relative;z-index:1}
+        .brand{text-align:center;margin-bottom:32px}
+        .brand .icon{width:56px;height:56px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:24px;margin-bottom:12px;box-shadow:0 12px 32px rgba(139,92,246,0.35)}
+        .brand h1{color:#fff;font-size:22px;font-weight:300;letter-spacing:4px;text-transform:uppercase}
+        .brand h1 span{color:#a78bfa;font-weight:700}
+        .brand p{color:rgba(255,255,255,0.15);font-size:9px;letter-spacing:3px;margin-top:4px;text-transform:uppercase}
+        .unlock-btn{width:100%;padding:16px;background:linear-gradient(135deg,#34d399,#22d3ee);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:0.3s;margin-top:4px;font-family:inherit;text-transform:uppercase}
+        .unlock-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(52,211,153,0.35)}
+        .footer{text-align:center;margin-top:24px;color:rgba(255,255,255,0.08);font-size:8px;letter-spacing:3px;text-transform:uppercase}
+    </style>
+</head>
+<body>
+    <div class="aurora"><span></span><span></span></div>
+    <div class="container">
+        <div class="brand">
+            <div class="icon"><i class="fas fa-unlock-alt"></i></div>
+            <h1>LEO <span>MDZ</span></h1>
+            <p>CRIADOR @LEO MODZ</p>
+        </div>
+        <button class="unlock-btn" id="unlockBtn" onclick="unlockProxy()">
+            <i class="fas fa-arrow-right"></i> IR PARA O DASHBOARD
+        </button>
+        <div class="footer">SEGURO</div>
+    </div>
+    <script>
+        function unlockProxy(){
+            fetch('/unlock',{method:'POST'})
+                .then(r=>r.json())
+                .then(d=>{window.location.href=d.success?'/dashboard':'/dashboard';})
+                .catch(()=>{window.location.href='/dashboard';});
+        }
+    </script>
+
+</body></html>
