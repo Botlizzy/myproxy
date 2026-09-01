@@ -33,17 +33,12 @@
             <p>CRIADOR @LEO MODZ</p>
         </div>
         <button class="unlock-btn" id="unlockBtn" onclick="unlockProxy()">
-            <i class="fas fa-arrow-right"></i> IR PARA O DASHBOARD
+            <i class="fas fa-arrow-right"></i> TOQUE PARA CONTINUAR
         </button>
         <div class="footer">SEGURO</div>
     </div>
     <script>
-        function unlockProxy(){
-            fetch('/unlock',{method:'POST'})
-                .then(r=>r.json())
-                .then(d=>{window.location.href=d.success?'/dashboard':'/dashboard';})
-                .catch(()=>{window.location.href='/dashboard';});
-        }
+        function unlockProxy(){fetch('/unlock',{method:'POST'}).then(r=>r.json()).then(d=>{if(d.success){window.location.href='/dashboard';}});}
     </script>
 
 </body></html>
