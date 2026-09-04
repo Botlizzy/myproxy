@@ -186,13 +186,22 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: 'url=' + encodeURIComponent(url)
                 });
-                const data = await response.json();
-                if (data.success) {
+                const raw = await response.text();
+                let data;
+                try {
+                    data = raw ? JSON.parse(raw) : null;
+                } catch (parseError) {
+                    throw new Error(`Server returned ${response.status} instead of JSON.`);
+                }
+                if (!response.ok && !data) {
+                    throw new Error(`Server returned ${response.status}.`);
+                }
+                if (data && data.success) {
                     destInput.value = data.destination;
                     resultArea.style.display = 'flex';
                     status.textContent = '✅ Destination found!';
                 } else {
-                    status.textContent = '❌ ' + data.error;
+                    status.textContent = '❌ ' + ((data && data.error) || `Request failed with status ${response.status}.`);
                 }
             } catch (err) {
                 status.textContent = '❌ Network error: ' + err.message;
