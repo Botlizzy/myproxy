@@ -6,16 +6,19 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-RUN a2dismod mpm_event mpm_worker mpm_prefork 2>/dev/null || true; \
-    a2enmod mpm_prefork
+# Apache must have exactly one MPM. Remove every enabled MPM module first,
+# then enable only the PHP-compatible prefork module.
+RUN a2dismod mpm_event mpm_worker mpm_prefork >/dev/null 2>&1 || true; \
+    rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf; \
+    a2enmod mpm_prefork; \
+    apache2ctl -t
 
 WORKDIR /var/www/html
 COPY . /var/www/html/
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && chown -R www-data:www-data /var/www/html \
-    && apache2ctl -t
+    && chown -R www-data:www-data /var/www/html
 
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
