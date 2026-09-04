@@ -1,6 +1,10 @@
 FROM php:8.3-apache
 
-RUN docker-php-ext-install curl
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libcurl4-openssl-dev pkg-config \
+    && docker-php-ext-install curl \
+    && apt-get purge -y --auto-remove pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
 COPY . /var/www/html/
